@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | SchedSmart</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to right, #330867, #30cfd0);
+            background: url('/static/images/blur_background.jpg') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;   
+            align-items: center;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            width: 650px;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus {
+            background: rgba(255, 255, 255, 1);
+            color: black;
+            border-color: #30cfd0;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        label {
+            font-size: 14px;
+            display: block;
+            text-align: left;
+            margin-top: 8px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #30cfd0;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #2a9ea7;
+        }
+
+        a {
+            display: block;
+            margin-top: 12px;
+            color: #30cfd0;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 500px) {
+            .form-container {
+                width: 90%;
+                padding: 20px;
+            }
+        }
+    </style>
+    <script>
+        function validateForm() {
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+            let phone = document.getElementById('phone').value;
+            let phonePattern = /^[0-9]{10}$/;
+            let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            if (email === "" || password === "") {
+                alert("Please fill in all required fields.");
+                return false;
+            }
+
+            if (!emailPattern.test(email)) {
+                alert("Enter a valid email address.");
+                return false;
+            }
+
+            if (!phonePattern.test(phone)) {
+                alert("Enter a valid 10-digit phone number.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <h2>SchedSmart Registration</h2>
+        <form method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+            {% csrf_token %}
+            
+            <div class="input-group">
+                <input type="text" name="first_name" placeholder="First Name" required>
+                <input type="text" name="last_name" placeholder="Last Name" required>
+            </div>
+
+            <input type="email" id="email" name="email" placeholder="Email" required>
+            <input type="text" name="username" placeholder="User Name" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+
+            <label for="contact_number">Contact Number:</label>
+            <div class="input-group">
+                <select name="country_code" required>
+                    <option value="+91" selected>+91 (India)</option>
+                </select>
+                <input type="tel" id="phone" name="contact_number" placeholder="Enter your phone number" required>
+            </div>
+
+            <!-- Designation Dropdown -->
+            <div class="form-group">
+                <label for="designation">Designation</label>
+                <select id="designation" name="designation" required>
+                    <option value="Assistant Professor">Assistant Professor</option>
+                    <option value="Associate Professor" >Associate Professor</option>
+                    <option value="Professor">Professor</option>
+                    <option value="HOD" >Head of Department (HOD)</option>
+                    <option value="Lecturer" >Lecturer</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            
+            <select name="department" required>
+                <option value="" disabled selected>Select Department</option>
+                <option value="BCA">BCA</option>
+                <option value="MCA">MCA</option>
+            </select>
+
+            <input type="text" name="subjects" placeholder="Subjects of Expertise" required>
+            <input type="text" name="degree" placeholder="Highest Degree Earned" required>
+            <input type="number" name="experience" placeholder="Years of Teaching Experience" required>
+
+            <label>Certifications (Upload PDF/DOC):</label>
+            <input type="file" name="certifications" accept=".pdf,.doc,.docx">
+
+            <button type="submit">Register</button>
+        </form>
+        <a href="{% url 'login' %}">Already have an account? Login</a>
+    </div>
+</body>
+</html>

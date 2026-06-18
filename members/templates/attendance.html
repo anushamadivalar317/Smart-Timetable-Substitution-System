@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Attendance Dashboard</title>
+    <style>
+        /* General styles */
+        body {
+    font-family: Arial, sans-serif;
+    background-image: url('/static/images/attendence_background.jpg'); /* Adjust the path if needed */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    text-align: center;
+    margin: 20px;
+}
+
+        /* Container */
+        .container {
+            width: 80%;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.473);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        /* Form Styles */
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005f73;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* Status Colors */
+        .present {
+            color: green;
+            font-weight: bold;
+        }
+
+        .absent {
+            color: red;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+
+            table {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Teacher Attendance</h2>
+
+        <!-- Attendance Form -->
+        <form id="attendanceForm" method="POST">
+            {% csrf_token %}
+            <label>Date:</label>
+            <input type="date" id="date" required>
+        
+            <label>Status:</label>
+            <select id="status">
+                <option value="present">Present</option>
+                <option value="absent">Absent</option>
+            </select>
+        
+           <!-- Hidden input for Teacher ID -->
+           <input type="hidden" id="teacher_id" value="{{ request.user.id }}">
+        
+            <button type="submit">Mark Attendance</button>
+        </form>
+
+
+        <!-- Attendance Table -->
+        <table>
+            <thead>
+                <tr>
+                    
+                    <th>Teacher Name</th>
+            <th>Teacher ID</th>
+            <th>Date</th>
+            <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="attendanceTable">
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.teacher.get_full_name }}</td>
+                    <td>{{ record.teacher.id }}</td>
+                    <td>{{ record.date }}</td>
+                    <td class="{% if record.status == 'absent' %}absent{% else %}present{% endif %}">{{ record.status }}</td>
+                </tr>
+                
+                {% empty %}
+                <tr>
+                    <td colspan="4">No attendance records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+        document.getElementById('attendanceForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent default form submission
+    
+            let date = document.getElementById('date').value;
+            let status = document.getElementById('status').value.toLowerCase();  // Convert to lowercase ('present'/'absent')
+            let teacher_id = document.getElementById('teacher_id').value; // Get Teacher ID
+    
+            if (date && status) {
+                fetch("/attendance/", {  // API endpoint (adjust if needed)
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCSRFToken()  // CSRF protection for Django
+                    },
+                    body: JSON.stringify({
+                        date: date,
+                        status: status,
+                        teacher_id: teacher_id
+                        
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(" Attendance saved successfully!");
+    
+                         // Add record to the frontend table
+                         let table = document.getElementById('attendanceTable');
+                        let row = table.insertRow();
+                        row.innerHTML = `
+                            
+                            <td>${data.teacher_name}</td>
+                    <td>${data.teacher_id}</td>
+                    <td>${date}</td>
+                    <td class="${status === 'absent' ? 'absent' : 'present'}">${status}</td>
+                        `;
+                        document.getElementById('attendanceForm').reset();  // Reset form
+                    } else {
+                        alert(" Error: " + data.error);
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            } else {
+                alert("Please select a date and status.");
+            }
+        });
+    
+        // Function to get CSRF token from cookies
+        function getCSRFToken() {
+            let cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                let [name, value] = cookie.trim().split('=');
+                if (name === "csrftoken") return value;
+            }
+            return "";
+        }
+    </script>
+
+</body>
+</html>

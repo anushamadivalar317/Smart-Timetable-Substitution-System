@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Profile</title>
+
+    <style>
+        .profile-container {
+            width: 60%;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .profile-section {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+        }
+
+        h2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .edit-btn, .save-btn {
+            background: #d9534f;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .save-btn {
+            display: none;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 5px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .readonly {
+            background: #f4f4f4;
+            border: none;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-container">
+        <h2>Teacher Profile <button class="edit-btn" onclick="enableEditing()">Edit Profile</button></h2>
+    
+        <div class="profile-section">
+            <!-- Username (Read-Only) -->
+            <p><strong>Username:</strong> 
+                <input type="text" value="{{ teacher.username }}" class="readonly" readonly>
+            </p>
+    
+            <!-- Email (Read-Only) -->
+            <p><strong>Email Address:</strong> 
+                <input type="text" value="{{ teacher.email }}" class="readonly" readonly>
+            </p>
+    
+            <!-- Editable Fields -->
+            <p><strong>First Name:</strong> 
+                <input type="text" id="first_name" value="{{ teacher.first_name }}" readonly>
+            </p>
+            <p><strong>Last Name:</strong> 
+                <input type="text" id="last_name" value="{{ teacher.last_name }}" readonly>
+            </p>
+    
+            <!-- Designation (Editable) -->
+            <p><strong>Designation:</strong> 
+                <input type="text" id="designation" value="{{ teacher.designation }}" readonly>
+            </p>
+    
+            <!-- Department (Editable) -->
+            <p><strong>Department:</strong> 
+                <input type="text" id="department" value="{{ teacher.department }}" readonly>
+            </p>
+    
+            <button id="save-btn" class="save-btn" onclick="saveProfile()">Save</button>
+        </div>
+    </div>
+    
+    <script>
+    function enableEditing() {
+        let editableFields = ["first_name", "last_name", "designation", "department"];
+    
+        editableFields.forEach(id => {
+            document.getElementById(id).removeAttribute("readonly");
+            document.getElementById(id).style.backgroundColor = "white";
+        });
+    
+        document.getElementById("save-btn").style.display = "inline-block";
+    }
+    
+    function saveProfile() {
+        let editableFields = ["first_name", "last_name", "designation", "department"];
+    
+        editableFields.forEach(id => {
+            document.getElementById(id).setAttribute("readonly", "true");
+            document.getElementById(id).style.backgroundColor = "#e9ecef";
+        });
+    
+        document.getElementById("save-btn").style.display = "none";
+        alert("Profile updated successfully!");
+    }
+    </script>
+    
+    </body>
+    </html>

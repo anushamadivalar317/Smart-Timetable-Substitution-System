@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('/static/images/teacher_background.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 25px;
+            align-items: center;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left span {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar-icons a {
+            color: #ffcc00;
+            font-size: 22px;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .profile-dropdown {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            gap: 8px;
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .profile-box img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: lightgray;
+        }
+
+        .profile-box i {
+            color: red;
+            font-size: 18px;
+        }
+
+        .profile-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 180px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .profile-dropdown-content a {
+            color: black;
+            padding: 12px;
+            display: block;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .profile-dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .menu-toggle {
+            font-size: 28px;
+            color: #ffcc00;
+            cursor: pointer;
+        }
+        
+    .dashboard-container {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .info-section {
+        background: white;
+        padding: 15px;
+        display: inline-block;
+        border-radius: 8px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+    }
+
+    /* Cards */
+    .card-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        width: 250px;
+        border-radius: 8px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        transition: 0.3s;
+    }
+
+    .card i {
+        margin-bottom: 10px;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .card h3 {
+        color: #333;
+        margin: 10px 0;
+    }
+
+    .card p {
+        color: #666;
+    }
+    .welcome-section {
+    text-align: center;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 500px;
+}
+
+.welcome-section h2 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.welcome-section h2 span {
+    color: red;
+}
+
+.welcome-section p {
+    font-size: 18px;
+    margin: 5px 0;
+    color: #333;
+}
+
+.welcome-section p strong {
+    color: #007bff;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <span>SchedSmart</span>
+        </div>
+        <div class="navbar-right">
+            <div class="navbar-icons">
+                <a href="#"><i class="fas fa-bell"></i></a>
+                <a href="{% url 'message' %}"><i class="fas fa-comment"></i></a>
+            </div>
+            <!-- Profile Dropdown -->
+            <div class="profile-dropdown">
+                <div class="profile-box" onclick="toggleProfileDropdown()">
+                    <span style="color: red;">{{ request.user.get_full_name|default:request.user.username }}</span>
+                    <i class="fas fa-caret-down"></i>
+                </div>
+                <div class="profile-dropdown-content" id="profile-menu">
+                    <a href="#"><i class="fas fa-home"></i> Dashboard</a>
+                    <a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a>
+                    <a href="{% url 'attendance' %}"><i class="fas fa-calendar-check"></i> Attendance</a>
+                    
+                    <a href="{% url 'contact' %}"><i class="fas fa-phone"></i> Contact</a>                            
+                    <a href="{% url 'logout' %}" style="color: red;"><i class="fas fa-sign-out-alt"></i> Log out</a>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+    <!-- Dashboard Content -->
+ <!-- Welcome Section -->
+ <div class="welcome-section">
+    <h2>Welcome, <span style="color: red;">{{ request.user.get_full_name|default:request.user.username }}</span></h2>
+    <p><strong>Department:</strong> <span id="dashboardDepartment">{{ request.user.department|default:"Not Set" }}</span></p>
+        <p><strong>Designation:</strong> <span id="dashboardDesignation">{{ request.user.designation|default:"Not Set" }}</span></p>
+</div>
+
+<!-- Cards Section -->
+<div class="card-container">
+    <a href="" style="text-decoration: none;">
+        <div class="card">
+            <i class="fas fa-calendar-alt fa-3x" style="color: #4CAF50;"></i>
+            <h3>Timetable</h3>
+            <p>Manage and view your schedules.</p>
+        </div>
+    </a>
+
+    <a href="" style="text-decoration: none;">
+        <div class="card">
+            <i class="fas fa-user-check fa-3x" style="color: #FF9800;"></i>
+            <h3>Substitutions</h3>
+            <p>manage substitute teachers.</p>
+        </div>
+    </a>
+
+    <a href="{% url 'attendance' %}" style="text-decoration: none;">
+        <div class="card">
+            <i class="fas fa-clipboard-list fa-3x" style="color: #2196F3;"></i>
+            <h3>Attendance</h3>
+            <p>Track attendance records.</p>
+        </div>
+    </a>
+
+    <a href="" style="text-decoration: none;">
+        <div class="card">
+            <i class="fas fa-file-export fa-3x" style="color: #E91E63;"></i>
+            <h3>Reports & Exports</h3>
+            <p>Generate and download reports.</p>
+        </div>
+    </a>
+</div>
+
+
+</div>
+
+
+
+
+    
+
+    <script>
+        // Toggle Profile Dropdown
+function toggleProfileDropdown() {
+    var menu = document.getElementById("profile-menu");
+    menu.style.display = (menu.style.display === "block") ? "none" : "block";
+}
+
+// Close dropdown when clicking outside
+window.onclick = function(event) {
+    if (!event.target.closest(".profile-dropdown")) {
+        document.getElementById("profile-menu").style.display = "none";
+    }
+};
+
+// Load stored or backend data
+function loadStoredData() {
+    let departmentElement = document.getElementById("department");
+    let designationElement = document.getElementById("designation");
+
+    // Check if elements exist before modifying them
+    if (departmentElement) {
+        departmentElement.innerText = localStorage.getItem("department") || departmentElement.innerText || "Not Set";
+    }
+    if (designationElement) {
+        designationElement.innerText = localStorage.getItem("designation") || designationElement.innerText || "Not Set";
+    }
+}
+
+// Update department and designation with prompts
+function updateInfo() {
+    let newDepartment = prompt("Enter your Department:", localStorage.getItem("department") || "");
+    let newDesignation = prompt("Enter your Designation:", localStorage.getItem("designation") || "");
+
+    if (newDepartment) {
+        localStorage.setItem("department", newDepartment);
+        document.getElementById("department").innerText = newDepartment;
+    }
+    if (newDesignation) {
+        localStorage.setItem("designation", newDesignation);
+        document.getElementById("designation").innerText = newDesignation;
+    }
+}
+
+// Load stored data when the page loads
+document.addEventListener("DOMContentLoaded", loadStoredData);
+
+        
+        
+    </script>
+
+</body>
+</html>
+

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchedSmart</title>
+    <style>
+        /* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: url('/static/images/background.jpg') no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Header */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 15px 30px;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+/* Logo */
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* Navbar */
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+nav ul li {
+    position: relative;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 8px 15px;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+/* Dropdown */
+.dropdown-menu {
+    min-width: 250px; /* Increase width */
+    padding: 10px; 
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    color: black;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    
+    border-radius: 5px;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    pointer-events: none; /* Prevents flickering */
+}
+
+/* Dropdown links */
+.dropdown-menu a {
+    display: block;
+    padding: 10px;
+    color: black;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.dropdown-menu a:hover {
+    background: lightgray;
+}
+
+/* Dropdown Hover Effect */
+nav ul li:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+.dropdown-toggle::after {
+    content: "▼";
+    font-size: 12px; /* Adjust size */
+    vertical-align: middle;
+}
+
+/* Login Button */
+.btn-login {
+    background: blue;
+    padding: 8px 15px;
+    border-radius: 5px;
+    color: white;
+    transition: background 0.3s;
+}
+
+.btn-login:hover {
+    background: darkblue;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    color: white;
+    margin-top: 100px; /* Prevents overlap */
+}
+
+.hero h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #f0f0f0;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background: green;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background: darkgreen;
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">SchedSmart</div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Features </a>
+                    <div class="dropdown-menu">
+                        <a href="#">Timetable Generation</a>
+                        <a href="#">Substitute Management</a>
+                    </div>
+                </li>
+                
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><a href="{% url 'login' %}" class="btn-login">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Effortless Scheduling, Smart Substitutes</h1>
+        <p>AI-powered timetable and substitute management made easy</p>
+        <a href="{% url 'register' %}" class="btn">Get Started</a>
+    </section>
+
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const dropdownToggle = document.querySelector(".dropdown-toggle");
+            const dropdown = document.querySelector(".dropdown");
+
+            dropdownToggle.addEventListener("click", function(event) {
+                event.preventDefault(); // Prevent default link behavior
+                dropdown.classList.toggle("active"); // Toggle dropdown menu
+            });
+
+            // Close dropdown if clicking outside
+            document.addEventListener("click", function(event) {
+                if (!dropdown.contains(event.target) && !dropdownToggle.contains(event.target)) {
+                    dropdown.classList.remove("active");
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

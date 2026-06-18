@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messaging</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chat-container {
+            width: 50%;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .message-box {
+            height: 300px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        .input-box {
+            display: flex;
+        }
+        .input-box input {
+            flex: 1;
+            padding: 5px;
+        }
+        .input-box button {
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h2>Messaging</h2>
+        <div class="message-box" id="messageBox"></div>
+        <div class="input-box">
+            <input type="text" id="messageInput" placeholder="Write a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            let input = document.getElementById("messageInput");
+            let messageBox = document.getElementById("messageBox");
+            if (input.value.trim() !== "") {
+                let newMessage = document.createElement("div");
+                newMessage.textContent = input.value;
+                messageBox.appendChild(newMessage);
+                input.value = "";
+            }
+        }
+    </script>
+</body>
+</html>

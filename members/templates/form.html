@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Profile</title>
+    <style>
+        /* Registration Form */
+        #form-container {
+            background: white;
+            padding: 20px;
+            width: 40%;
+            margin: 50px auto;
+            display: none;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .visible {
+            display: block !important;
+            opacity: 1 !important;
+            transform: scale(1) !important;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        form input, form select {
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        form button {
+            margin-top: 15px;
+            padding: 10px;
+            background: #0d1b2a;
+            color: white;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        form button:hover {
+            background: #1e90ff;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="form-container" id="form-container">
+        <h2>Complete Your Profile</h2>
+        <form id="profile-form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <label>First Name:</label>
+            <input type="text" name="first_name" id="first_name" required>
+
+            <label>Last Name:</label>
+            <input type="text" name="last_name" id="last_name" required>
+
+            <label>Designation:</label>
+            <input type="text" name="designation" id="designation" required>
+
+            <label>Department:</label>
+            <select name="department" id="department" required>
+                <option value="BCA">BCA</option>
+                <option value="MCA">MCA</option>
+            </select>
+
+            <label>Subjects of Expertise:</label>
+            <input type="text" name="subjects" id="subjects" required>
+
+            <label>Highest Degree Earned:</label>
+            <input type="text" name="degree" id="degree" required>
+
+            <label>Years of Teaching Experience:</label>
+            <input type="number" name="experience" id="experience" required>
+
+            <label>Certifications (Upload PDF/DOC):</label>
+            <input type="file" name="certifications" id="certifications" accept=".pdf,.doc,.docx">
+
+            <button type="submit">Submit</button>
+        </form>  
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let formContainer = document.getElementById("form-container");
+            formContainer.classList.add("visible"); // Show form on page load
+
+            document.getElementById("profile-form").addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent default form submission
+                
+                let firstName = document.getElementById("first_name").value.trim();
+                let lastName = document.getElementById("last_name").value.trim();
+                let designation = document.getElementById("designation").value.trim();
+                let subjects = document.getElementById("subjects").value.trim();
+                let degree = document.getElementById("degree").value.trim();
+                let experience = document.getElementById("experience").value.trim();
+                let fileInput = document.getElementById("certifications");
+                
+                // Required Field Validation
+                if (!firstName || !lastName || !designation || !subjects || !degree || !experience) {
+                    alert("Please fill all required fields.");
+                    return;
+                }
+
+                // File Validation (if uploaded)
+                if (fileInput.files.length > 0) {
+                    let file = fileInput.files[0];
+                    let allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
+
+                    if (!allowedExtensions.exec(file.name)) {
+                        alert("Invalid file type! Only PDF, DOC, and DOCX are allowed.");
+                        return;
+                    }
+
+                    if (file.size > 2 * 1024 * 1024) { // 2MB limit
+                        alert("File size exceeds 2MB!");
+                        return;
+                    }
+                }
+
+                // Simulate form submission delay before redirecting
+                alert("Profile Submitted Successfully! Redirecting to Dashboard...");
+                setTimeout(function () {
+                    window.location.href = "teacher_dashboard.html"; // Redirect to teacher dashboard
+                }, 1500); // Delay of 1.5 seconds
+            });
+        });
+    </script>
+
+</body>
+</html>
