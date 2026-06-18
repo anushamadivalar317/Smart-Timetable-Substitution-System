@@ -1,4 +1,4 @@
-# Smart Timetable Substitution System
+# Smart Scheduling, Timetable Generation, and Faculty Substitution Management System
 
 ## Overview
 
