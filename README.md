@@ -1,4 +1,4 @@
-# Smart Scheduling, Timetable Generation, and Faculty Substitution Management System
+# Smart Academic Scheduler with Real-Time Faculty Substitution
 
 ## Overview
 A Django-based web application for managing teacher schedules, attendance, and timetable substitutions.
